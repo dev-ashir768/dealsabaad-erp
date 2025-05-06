@@ -8,6 +8,7 @@ import {
   Command,
   Frame,
   GalleryVerticalEnd,
+  LogOut,
   Map,
   PieChart,
   Settings2,
@@ -27,9 +28,11 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/shadcn/sidebar";
-import { TeamSwitcher } from "@/components/ui/global/team-switcher";
 import Image from "next/image";
 import Link from "next/link";
+import { Button } from "./button";
+import SidebarFooterLogout from "./sidebar-footer-logout";
+import SidebarHeaderLogo from "./sidebar-header-logo";
 
 // This is sample data.
 const data = {
@@ -164,28 +167,12 @@ const data = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader>
-        {/* <TeamSwitcher teams={data.teams} /> */}
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <Link href="/">
-              <Image
-                src="/images/insurance.svg"
-                alt="logo"
-                width={50}
-                height={50}
-              />
-            </Link>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarHeader>
+      <SidebarHeaderLogo />
       <SidebarContent>
         <NavMain items={data.navMain} />
         <NavProjects projects={data.projects} />
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={data.user} />
-      </SidebarFooter>
+      <SidebarFooterLogout />
       <SidebarRail />
     </Sidebar>
   );
