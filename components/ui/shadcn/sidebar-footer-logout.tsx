@@ -11,7 +11,7 @@ import { LogOut } from "lucide-react";
 const SidebarFooterLogout = () => {
   return (
     <>
-      <SidebarFooter className="border-t">
+      <SidebarFooter className="border-t border-sidebar-border">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton variant="logout" size="xl" asChild>

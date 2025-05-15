@@ -11,7 +11,7 @@ import Image from "next/image";
 const SidebarHeaderLogo = () => {
   return (
     <>
-      <SidebarHeader className="border-b bg-[#0F141E] h-[65px] group-data-[collapsible=icon]:h-[41px] group-data-[collapsible=icon]:justify-center transition-[width,height]">
+      <SidebarHeader className="border-b border-sidebar-border bg-background h-[65px] group-data-[collapsible=icon]:h-[41px] group-data-[collapsible=icon]:justify-center transition-[width,height]">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton variant="logo" asChild>
