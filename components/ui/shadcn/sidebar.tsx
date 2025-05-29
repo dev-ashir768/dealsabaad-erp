@@ -482,7 +482,7 @@ const sidebarMenuButtonVariants = cva(
         outline:
           "bg-background shadow-[0_0_0_1px_hsl(var(--sidebar-border))] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_hsl(var(--sidebar-accent))]",
         logout:
-          "mx-auto bg-gray-100 text-charcoal hover:bg-red-600 hover:text-white group-data-[collapsible=icon]:justify-start justify-center",
+          "mx-auto bg-foreground text-sidebar-accent-foreground hover:bg-red-600 hover:text-foreground group-data-[collapsible=icon]:justify-start justify-center",
         logo: "rounded-none bg-transparent hover:bg-transparent",
       },
       size: {
@@ -521,7 +521,7 @@ function SidebarMenuButton({
       data-sidebar="menu-button"
       data-size={size}
       data-active={isActive}
-      className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
+      className={cn(sidebarMenuButtonVariants({ variant, size }), "cursor-pointer", className)}
       {...props}
     />
   );
@@ -573,7 +573,7 @@ function SidebarMenuAction({
         "peer-data-[size=lg]/menu-button:top-2.5",
         "group-data-[collapsible=icon]:hidden",
         showOnHover &&
-          "peer-data-[active=true]/menu-button:text-sidebar-accent-foreground group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-[state=open]:opacity-100 md:opacity-0",
+        "peer-data-[active=true]/menu-button:text-sidebar-accent-foreground group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-[state=open]:opacity-100 md:opacity-0",
         className
       )}
       {...props}

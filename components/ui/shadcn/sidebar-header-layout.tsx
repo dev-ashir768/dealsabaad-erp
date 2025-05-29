@@ -8,7 +8,7 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 
-const SidebarHeaderLogo = () => {
+const SidebarHeaderLayout = () => {
   return (
     <>
       <SidebarHeader className="border-b border-sidebar-border bg-background h-[65px] group-data-[collapsible=icon]:h-[41px] group-data-[collapsible=icon]:justify-center transition-[width,height]">
@@ -42,4 +42,4 @@ const SidebarHeaderLogo = () => {
   );
 };
 
-export default SidebarHeaderLogo;
+export default SidebarHeaderLayout;

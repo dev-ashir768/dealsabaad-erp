@@ -8,10 +8,10 @@ import {
 import Link from "next/link";
 import { LogOut } from "lucide-react";
 
-const SidebarFooterLogout = () => {
+const SidebarFooterLayout = () => {
   return (
     <>
-      <SidebarFooter className="border-t border-sidebar-border">
+      <SidebarFooter className="border-t border-sidebar-border h-[65px] flex justify-center">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton variant="logout" size="xl" asChild>
@@ -27,4 +27,4 @@ const SidebarFooterLogout = () => {
   );
 };
 
-export default SidebarFooterLogout;
+export default SidebarFooterLayout;
