@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import {
   ColumnDef,  // 
-  ColumnFiltersState, // State for column filters
+  ColumnFiltersState, FilterFn, // State for column filters
   SortingState, // State for sorting
   VisibilityState,  // State for column visibility
   flexRender,
@@ -11,22 +11,11 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  
   useReactTable,
 } from "@tanstack/react-table"
 
-import { Button } from "@/components/ui/shadcn/button"
-import { Checkbox } from "@/components/ui/shadcn/checkbox"
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/shadcn/dropdown-menu"
 import { ScrollArea, ScrollBar } from "@/components/ui/shadcn/scroll-area";
-import { Input } from "@/components/ui/shadcn/input"
 import {
   Table,
   TableBody,
@@ -35,22 +24,42 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/shadcn/table"
-import { ChevronDown } from 'lucide-react'
 import DataTablePagination from './datatable-pagination';
+import DataTableGlobalFilter from './datatable-global-filter';
 import DataTableColumnVisibility from './datatable-column-visibility';
+
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[]
+  enableGlobalFilter?: boolean; // Optional prop to enable global filtering
+  enablePagination?: boolean; // Optional prop to enable pagination
+  enableColumnVisibility?: boolean; // Optional prop to enable column visibility
 }
 
-const DataTable = <TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) => {
+// Custom filter function for multi-select
+const multiSelectFilter: FilterFn<any> = (row, columnId, filterValue) => {
+  if (!filterValue?.length) return true;
+  const cellValue = String(row.getValue(columnId));
+  return filterValue.includes(cellValue);
+};
+
+
+const DataTable = <TData, TValue>({
+  columns,
+  data,
+  enableGlobalFilter,
+  enablePagination,
+  enableColumnVisibility,
+}: DataTableProps<TData, TValue>) => {
 
   // State management for sorting, column filters, visibility, and row selection
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
+  const [globalFilter, setGlobalFilter] = useState<string>("")
+
 
   // Initialize the table with the provided data and columns
   // and the state management functions for sorting, filtering, visibility, and selection
@@ -61,31 +70,34 @@ const DataTable = <TData, TValue>({ columns, data }: DataTableProps<TData, TValu
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    onGlobalFilterChange: setGlobalFilter,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    filterFns: {
+      multiSelect: multiSelectFilter, // Register the custom filter function
+    },
     state: {
       sorting,
       columnFilters,
       columnVisibility,
       rowSelection,
+      globalFilter
     }
   })
+  console.log("Table Data:", table.getState().columnFilters);
 
   return (
     <>
       <div className="w-full">
-        <div className="flex items-center py-4">
-          <Input
-            placeholder="Filter emails..."
-            value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("email")?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
-          <DataTableColumnVisibility table={table} />
+        <div className="flex items-center pb-6">
+          {enableGlobalFilter && (
+            <DataTableGlobalFilter table={table} />
+          )}
+          {enableColumnVisibility && (
+            <DataTableColumnVisibility table={table} />
+          )}
         </div>
         <ScrollArea className="h-[420px] rounded-md border border-sidebar-border mb-6 w-full">
           <ScrollBar orientation="vertical" />
@@ -129,7 +141,7 @@ const DataTable = <TData, TValue>({ columns, data }: DataTableProps<TData, TValu
                 <TableRow>
                   <TableCell
                     colSpan={columns.length}
-                    className="h-24 text-center"
+                    className="h-[380px] text-center text-foreground"
                   >
                     No results.
                   </TableCell>
@@ -139,7 +151,9 @@ const DataTable = <TData, TValue>({ columns, data }: DataTableProps<TData, TValu
           </Table>
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
-        <DataTablePagination table={table} />
+        {enablePagination && (
+          <DataTablePagination table={table} />
+        )}
       </div>
     </>
   )

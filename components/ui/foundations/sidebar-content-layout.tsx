@@ -1,8 +1,8 @@
 "use client";
 
 import * as Icons from "lucide-react";
-import { SidebarContent, SidebarGroup, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem } from "./sidebar";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./collapsible";
+import { SidebarContent, SidebarGroup, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem } from "../shadcn/sidebar";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../shadcn/collapsible";
 import Link from "next/link";
 import { MenuItem } from "@/types/menuTypes";
 import { usePathname } from 'next/navigation'

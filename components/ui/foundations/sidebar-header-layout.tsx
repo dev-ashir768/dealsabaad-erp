@@ -4,7 +4,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "./sidebar";
+} from "../shadcn/sidebar";
 import Link from "next/link";
 import Image from "next/image";
 

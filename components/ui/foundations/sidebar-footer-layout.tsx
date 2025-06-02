@@ -4,7 +4,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "./sidebar";
+} from "../shadcn/sidebar";
 import Link from "next/link";
 import { LogOut } from "lucide-react";
 
