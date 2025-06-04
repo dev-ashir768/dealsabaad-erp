@@ -11,7 +11,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  
+
   useReactTable,
 } from "@tanstack/react-table"
 
@@ -27,11 +27,15 @@ import {
 import DataTablePagination from './datatable-pagination';
 import DataTableGlobalFilter from './datatable-global-filter';
 import DataTableColumnVisibility from './datatable-column-visibility';
+import DataTableExport from './datatable-export';
 
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: TData[]
+  data: TData[],
+  excludeExportColumns?: string[]; // Optional prop to exclude specific columns from export
+  exportFilename?: string; // Optional prop for export filename
+  enableExport?: boolean; // Optional prop to enable export functionality
   enableGlobalFilter?: boolean; // Optional prop to enable global filtering
   enablePagination?: boolean; // Optional prop to enable pagination
   enableColumnVisibility?: boolean; // Optional prop to enable column visibility
@@ -48,6 +52,9 @@ const multiSelectFilter: FilterFn<any> = (row, columnId, filterValue) => {
 const DataTable = <TData, TValue>({
   columns,
   data,
+  excludeExportColumns,
+  exportFilename,
+  enableExport,
   enableGlobalFilter,
   enablePagination,
   enableColumnVisibility,
@@ -86,18 +93,18 @@ const DataTable = <TData, TValue>({
       globalFilter
     }
   })
-  console.log("Table Data:", table.getState().columnFilters);
 
   return (
     <>
       <div className="w-full">
-        <div className="flex items-center pb-6">
-          {enableGlobalFilter && (
-            <DataTableGlobalFilter table={table} />
-          )}
-          {enableColumnVisibility && (
-            <DataTableColumnVisibility table={table} />
-          )}
+        <div className="flex items-center justify-between pb-6">
+          <div>
+            {enableGlobalFilter && (<DataTableGlobalFilter table={table} />)}
+          </div>
+          <div className='flex items-center gap-3'>
+            {enableColumnVisibility && (<DataTableColumnVisibility table={table} />)}
+            {enableExport && (<DataTableExport table={table} filename={exportFilename} excludeColumns={excludeExportColumns} />)}
+          </div>
         </div>
         <ScrollArea className="h-[420px] rounded-md border border-sidebar-border mb-6 w-full">
           <ScrollBar orientation="vertical" />

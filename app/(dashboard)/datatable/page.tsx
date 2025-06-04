@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useMemo } from "react";
 import {
   Card,
   CardContent,
@@ -41,61 +41,61 @@ const page = () => {
     },
     {
       id: "3u1reuv4",
-      amount: 242,
+      amount: 316,
       status: "success",
       email: "Abe45@example.com",
     },
     {
       id: "derv1ws0",
-      amount: 837,
+      amount: 316,
       status: "processing",
       email: "Monserrat44@example.com",
     },
     {
       id: "5kma53ae",
-      amount: 874,
+      amount: 316,
       status: "success",
       email: "Silas22@example.com",
     },
     {
       id: "bhqecj4p",
-      amount: 721,
+      amount: 316,
       status: "failed",
       email: "carmella@example.com",
     },
     {
       id: "bhqecj4p",
-      amount: 721,
+      amount: 316,
       status: "failed",
       email: "carmella@example.com",
     },
     {
       id: "bhqecj4p",
-      amount: 721,
+      amount: 316,
       status: "failed",
       email: "carmella@example.com",
     },
     {
       id: "bhqecj4p",
-      amount: 721,
+      amount: 316,
       status: "failed",
       email: "carmella@example.com",
     },
     {
       id: "bhqecj4p",
-      amount: 721,
+      amount: 316,
       status: "failed",
       email: "carmella@example.com",
     },
     {
       id: "bhqecj4p",
-      amount: 721,
+      amount: 316,
       status: "failed",
       email: "carmella@example.com",
     },
     {
       id: "bhqecj4p",
-      amount: 721,
+      amount: 316,
       status: "failed",
       email: "carmella@example.com",
     },
@@ -124,6 +124,38 @@ const page = () => {
       email: "carmella@example.com",
     },
   ]
+
+  // Filter options
+
+  const statusFilterOptions = useMemo(() => {
+    // 1) Collect all statuses
+    const allStatuses = data.map((item) => item.status);
+    // 2) Turn into a Set to dedupe
+    const uniqueStatuses = Array.from(new Set(allStatuses));
+    // 3) Map each status ➔ { label: TitleCase(status), value: status }
+    return uniqueStatuses.map((status) => ({
+      label: status.charAt(0).toUpperCase() + status.slice(1),
+      value: status,
+    }));
+  }, [data]);
+
+  const emailFilterOptions = useMemo(() => {
+    const allEmails = data.map((item) => item.email);
+    const uniqueEmails = Array.from(new Set(allEmails));
+    return uniqueEmails.map((email) => ({
+      label: email,
+      value: email,
+    }));
+  }, [data]);
+
+  const amountFilterOptions = useMemo(() => {
+    const allAmounts = data.map((item) => item.amount)
+    const uniqueAmounts = Array.from(new Set(allAmounts))
+    return uniqueAmounts.map((amount) => ({
+      label: amount.toString(),
+      value: amount.toString()
+    }))
+  }, [data])
 
   const columns: ColumnDef<Payment>[] = [
     {
@@ -159,12 +191,7 @@ const page = () => {
       filterFn: "multiSelect",
       meta: {
         filterType: "multiselect",
-        filterOptions: [
-          { label: "Pending", value: "pending" },
-          { label: "Processing", value: "processing" },
-          { label: "Success", value: "success" },
-          { label: "Failed", value: "failed" },
-        ],
+        filterOptions: statusFilterOptions,
         filterPlaceholder: "Filter status...",
       } as ColumnMeta,
     },
@@ -185,13 +212,7 @@ const page = () => {
       filterFn: "multiSelect",
       meta: {
         filterType: "multiselect",
-        filterOptions: [
-          { label: "ken99@example.com", value: "ken99@example.com" },
-          { label: "Abe45@example.com", value: "Abe45@example.com" },
-          { label: "Monserrat44@example.com", value: "Monserrat44@example.com" },
-          { label: "Silas22@example.com", value: "Silas22@example.com" },
-          { label: "carmella@example.com", value: "carmella@example.com" },
-        ],
+        filterOptions: emailFilterOptions,
         filterPlaceholder: "Filter email...",
       } as ColumnMeta,
     },
@@ -207,12 +228,18 @@ const page = () => {
           currency: "USD",
         }).format(amount);
 
-        return <div className="text-right font-medium">{formatted}</div>;
+        return <div className="font-medium">{formatted}</div>;
       },
+      filterFn: "multiSelect",
+      meta: {
+        filterType: "multiselect",
+        filterOptions: amountFilterOptions,
+        filterPlaceholder: "Filter amount..."
+      } as ColumnMeta
     },
     {
       id: "actions",
-      enableHiding: false,
+      header: "Actions",
       cell: ({ row }) => {
         const payment = row.original;
         return (
@@ -237,6 +264,8 @@ const page = () => {
           </DropdownMenu>
         );
       },
+      enableSorting: false,
+      enableHiding: false,
     },
   ];
 
@@ -251,6 +280,9 @@ const page = () => {
           <DataTable
             columns={columns}
             data={data}
+            enableExport={true}
+            exportFilename="payments-export"
+            excludeExportColumns={["actions", "select"]}
             enableGlobalFilter={true}
             enablePagination={true}
             enableColumnVisibility={true}
